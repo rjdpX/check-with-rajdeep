@@ -12,19 +12,7 @@ const buttons = [
     { label: "GitHub", href: "https://github.com/rjdpX", icon: <FaGithub /> },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/rajdeepforreal", icon: <FaLinkedin /> },
   ];
-
-// Track cursor pos inside buttons container (relative)
-const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
-const [isHovering, setIsHovering] = useState(false);
-
-function handleMouseMove(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-  const rect = e.currentTarget.getBoundingClientRect();
-  setGlowPos({
-    x: e.clientX - rect.left,
-    y: e.clientY - rect.top,
-  });
-}
-
+  
 const projects = [
   {
     title: "Traffic Light Recognition",
@@ -53,6 +41,19 @@ const projects = [
 ];
 
 export default function Home() {
+
+  // Track cursor pos inside buttons container (relative)
+  const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setGlowPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+}
+
   return (
     <main className="min-h-screen bg-[#0b0f19] text-white">
       {/* NAV */}
@@ -71,63 +72,97 @@ export default function Home() {
 
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 grid md:grid-cols-2 gap-10 items-center">
-        {/* Left: Text */}
+      {/* Left: Text */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        {/* Typing animation replaced with static text here */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="text-xl md:text-2xl font-semibold mb-6 bg-gradient-to-r from-[#d2c17c] to-[#00eaff] bg-clip-text text-transparent"
         >
-          {/* ✅ Typing Animation */}
-          {/* <div className="text-xl md:text-2xl font-semibold text-neutral-100 mb-6"> */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-            className="text-xl md:text-2xl font-semibold mb-6 bg-gradient-to-r from-[#d2c17c] to-[#00eaff] bg-clip-text text-transparent"
-          >
-            Hey, this is Rajdeep here — welcome to my website!
-          </motion.div>
+          Hey there! I’m Rajdeep — welcome to my digital lab of AI, robots, and innovation!
+        </motion.div>
 
-          <p className="text-sm uppercase tracking-wider text-neutral-400">
-            MS Robotics @ WPI · ex-ZF · ex-Accenture
-          </p>
+        <p className="text-sm uppercase tracking-wider text-neutral-400">
+          MS Robotics @ WPI · ex-ZF · ex-Accenture
+        </p>
 
-          <h1 className="mt-3 text-4xl md:text-6xl font-bold leading-tight">
-            Engineering the Future:{" "}
-            <span className="bg-gradient-to-r from-[#d2c17c] to-[#00eaff] bg-clip-text text-transparent">
-              AI, Robotics & Autonomous Mobility
-            </span>
-          </h1>
+        <h1 className="mt-3 text-4xl md:text-6xl font-bold leading-tight">
+          Engineering the Future:{" "}
+          <span className="bg-gradient-to-r from-[#d2c17c] to-[#00eaff] bg-clip-text text-transparent">
+            AI, Robotics & Autonomous Mobility
+          </span>
+        </h1>
 
-          <p className="mt-5 max-w-2xl text-neutral-300">
-            Building applied AI systems—from computer vision for autonomy to LLM-powered automation. Focused on robust, real-world deployment.
-          </p>
+        <p className="mt-5 max-w-2xl text-neutral-300">
+          Building applied AI systems—from computer vision for autonomy to LLM-powered automation. Focused on robust, real-world deployment.
+        </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-          {[
-            { label: "Download Resume", href: "/resume.pdf", solid: true },
-            { label: "GitHub", href: "https://github.com/rjdpX" },
-            { label: "LinkedIn", href: "https://www.linkedin.com/in/rajdeepforreal" },
-          ].map(({ label, href, solid }) => (
+        {/* Glowing buttons with icons and cursor-follow glow */}
+        <div className="mt-8 flex flex-wrap gap-3">
+          {buttons.map(({ label, href, solid, icon }) => (
             <a
               key={label}
               href={href}
-              className={`relative rounded-xl px-5 py-2.5 font-medium z-10 overflow-hidden
-                transition-all duration-300 ease-out group
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`relative rounded-xl px-5 py-2.5 font-medium overflow-hidden group
                 ${solid
                   ? "bg-white text-black shadow hover:shadow-xl"
-                  : "border border-white/30 text-white hover:border-white/60"}`}
+                  : "border border-white/30 text-white hover:border-white/60"}
+              `}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+              style={{ cursor: "pointer" }}
             >
-              {/* Glow background */}
+              {/* Glow circle */}
               <span
-                className="absolute inset-0 bg-gradient-to-r from-[#d2c17c] to-[#00eaff]
-                          opacity-0 group-hover:opacity-40 blur-lg transition-opacity duration-500 ease-in-out pointer-events-none"
+                className={`pointer-events-none absolute rounded-full
+                            bg-gradient-to-r from-[#d2c17c] to-[#00eaff]
+                            opacity-0 group-hover:opacity-60
+                            transition-opacity duration-300 ease-in-out
+                            blur-3xl
+                            w-32 h-32
+                            mix-blend-screen
+                            `}
+                style={{
+                  top: glowPos.y - 64 / 2,
+                  left: glowPos.x - 64 / 2,
+                }}
               />
-              <span className="relative z-10">{label}</span>
+
+              {/* Text + Icon */}
+              <span className="relative flex items-center gap-2 z-10 select-none">
+                {icon && (
+                  <motion.span
+                    whileHover={{
+                      scale: 1.2,
+                      rotate: label === "GitHub" ? [0, 15, -15, 0] : 0,
+                      y: label === "LinkedIn" ? [0, -5, 0] : 0,
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      ease: "easeInOut",
+                    }}
+                    className="inline-block"
+                  >
+                    {icon}
+                  </motion.span>
+                )}
+                {label}
+              </span>
             </a>
           ))}
         </div>
-        </motion.div>
+      </motion.div>
 
       {/* Right: Photo with gradient patch */}
       <motion.div
@@ -140,12 +175,12 @@ export default function Home() {
         <div
           className="
             absolute z-0 
-            h-96 w-96              /* 👈 size of blob, tweak here */
+            h-96 w-96
             rounded-full 
             blur-[90px] opacity-90
             bg-gradient-to-br from-[#41118e] to-[#d2c17c]
-            scale-x-125            /* 👈 make it elliptical horizontally */
-            translate-x-6 -translate-y-4  /* 👈 move blob diagonally */
+            scale-x-125
+            translate-x-6 -translate-y-4
           "
         />
         {/* your photo */}
@@ -157,7 +192,7 @@ export default function Home() {
           priority
           className="
             relative z-10
-            rounded-2xl   /* 👈 change to rounded-full for a circle */
+            rounded-2xl
             object-cover
           "
         />
